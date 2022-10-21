@@ -21,7 +21,7 @@
   - name: Install InfluxDB apt package
     become: yes
     apt:
-      name: influxdb2=2.4.0-1
+      name: influxdb2=2.4.0*
       state: present
       update_cache: yes
 
@@ -72,23 +72,28 @@
   - name: Install Speedtest CLI apt package
     become: yes
     apt:
-      name: speedtest=1.2.0.84-1.ea6b6773cf
+      name: speedtest=1.2.0*
       state: present
+      update_cache: yes
 
 - name: Configure services
   hosts: raspberrypi
+  vars:
+    influxdb_username: admin
+    influxdb_password: password
+    influxdb_org: internet_monitor
+    influxdb_bucket: speed_tests
   tasks:
   - name: Start InfluxDB
     become: yes
     ansible.builtin.systemd:
       enabled: yes
       state: restarted
-      daemon_reload: yes
       name: influxdb
   - name: Run InfluxDB setup
     become: yes
     ansible.builtin.shell:
-      cmd: influx setup -u admin -p password -o internet_monitor -b speed_tests -r 0 -f
+      cmd: influx setup -u {{ influxdb_username }} -p {{ influxdb_password }} -o {{ influxdb_org }} -b {{ influxdb_bucket }} -r 0 -f
       creates: /root/.influxdbv2/configs
   - name: Get InfluxDB operator token
     become: yes
@@ -98,8 +103,12 @@
     become: yes
     vars:
       os_environment:
-      - key: INFLUXDB_TOKEN 
+      - key: INFLUXDB_TOKEN
         value : "{{ token.stdout }}"
+      - key: INFLUXDB_ORG
+        value : "{{ influxdb_org }}"
+      - key: INFLUXDB_BUCKET
+        value : "{{ influxdb_bucket }}"
     no_log: yes
     with_items: "{{ os_environment }}"
     lineinfile:
@@ -124,16 +133,17 @@
     ansible.builtin.systemd:
       enabled: yes
       state: restarted
-      daemon_reload: yes
       name: grafana-server
 
 - name: Setup speedtest cron job
   hosts: raspberrypi
+  vars:
+    script_path: /usr/local/sbin/speedtest.py
   tasks:
   - name: Install pip
     become: yes
     apt:
-      name: python3-pip=20.3.4-4+rpt1*
+      name: python3-pip=20.3.4*
       state: present
       update_cache: yes
   - name: Install InfluxDB client library
@@ -143,11 +153,11 @@
     become: yes
     ansible.builtin.copy:
       src: speedtest.py
-      dest: /usr/local/sbin/speedtest.py
+      dest: "{{ script_path }}"
   - name: Setup speedtest cron job
     become: yes
-    ansible.builtin.cron:
-      user: root
-      name: "speedtest"
-      minute: "*/15"
-      job: "python /usr/local/sbin/speedtest.py"
+    lineinfile:
+      path: /var/spool/cron/crontabs/root
+      state: present
+      regexp: python {{ script_path }}
+      line: "{{ cron }} python {{ script_path }}"

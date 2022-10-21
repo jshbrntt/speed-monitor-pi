@@ -1,6 +1,8 @@
 ---
 ungrouped:
+  vars:
+    cron: "{{ lookup('env', 'CRON') }}"
   hosts:
     raspberrypi:
-      ansible_user: pi
-      ansible_host: raspberrypi.local
+      ansible_user: "{{ lookup('env', 'SSH_USER') }}"
+      ansible_host: "{{ lookup('env', 'HOST') }}"

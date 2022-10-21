@@ -9,9 +9,9 @@ datasources:
   isDefault: true
   version: 1
   jsonData:
-    defaultBucket: speed_tests
+    defaultBucket: $INFLUXDB_BUCKET
     httpMode: POST
-    organization: internet_monitor
+    organization: $INFLUXDB_ORG
     version: Flux
     readOnly: true
   secureJsonData:

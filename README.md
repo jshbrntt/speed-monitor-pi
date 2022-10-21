@@ -45,8 +45,19 @@ $ ssh-keygen
 
 8. Run the Ansible playbook to provision your Pi.
 
+    You can specify any of the following parameters to customize the installation.
+
 ```shell
-$ make
+# You can specify any of the following parameters to customize the installation.
+
+# Defaults:
+
+# HOST=raspberrypi.local  [Address of the Raspberry Pi]
+# SSH_USER=pi             [SSH user]
+# SSH_KEY=~/.ssh/id_rsa   [Location of the SSH private key]
+# CRON='*/30 * * * *'     [Speedtest interval (Every 30 minutes)]
+
+$ make [HOST='...'] [SSH_USER='...'] [SSH_KEY='...'] [CRON='...']
 ```
 
 9. Access your **Internet Speed Monitor** Grafana dashboard here, with `admin:admin`.

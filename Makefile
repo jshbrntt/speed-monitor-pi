@@ -1,4 +1,7 @@
-RPI_ADDR := 192.168.1.16
+HOST := raspberrypi.local
+SSH_USER := pi
+SSH_KEY := ~/.ssh/id_rsa
+CRON := */30 * * * *
 
 .EXPORT_ALL_VARIABLES:
 
@@ -6,6 +9,10 @@ RPI_ADDR := 192.168.1.16
 provision : build
 	docker compose run --rm ansible
 
+.PHONY: shell
+shell : build
+	docker compose run --entrypoint '' --rm ansible bash
+
 .PHONY: build
 build :
-	docker compose build ansible
+	docker compose build --pull ansible
