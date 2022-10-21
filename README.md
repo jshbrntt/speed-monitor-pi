@@ -1,14 +1,14 @@
 # Speed Monitor Pi
 
-Ansible playbook to provisions a Raspberry Pi 4 for the purpose of monitoring internet speed.
+This tool runs an [Ansible][ansible] playbook in a [Docker][docker] container to provision a Raspberry Pi for the purpose of monitoring internet speed.
 
-- Tested with Raspberry Pi OS Lite (64-bit) on a Raspberry Pi 4 Model B.
-- Using OS version: `2022-09-22-raspios-bullseye-arm64-lite.img.xz`
+- Tested on Raspberry Pi OS Lite (64-bit) with a Raspberry Pi 4 Model B.
+- Using OS version: `2022-09-22-raspios-bullseye-arm64-lite.img.xz` (but later versions should also work!).
 
 ![Dashboard past year](./screenshots/dashboard-past-year.png)
 
 ### Requirements
-- [Raspberry Pi](https://www.raspberrypi.org/) 3 Model B+ or 4 Model B (Gigabit capable)
+- [Raspberry Pi](https://www.raspberrypi.org/) 3 Model B+ or 4 Model B (**Gigabit capable**)
 - [Docker][docker] >= v20.10.17
 - [GNU Make][make] >= 4.3
 
@@ -21,11 +21,11 @@ Ansible playbook to provisions a Raspberry Pi 4 for the purpose of monitoring in
 
 ### Setup
 
-1.  Install [Docker](https://docs.docker.com/get-docker/)
+1.  Install [Docker](https://docs.docker.com/get-docker/).
 
-2.  Install GNU Make (*if your OS doesn't provide it by default*)
+2.  Install GNU Make (*if your OS doesn't provide it by default*).
 
-3.  Generate a SSH key to access the Raspberry Pi with.
+3.  Generate an SSH key to access the Raspberry Pi with.
 
     ```shell
     $ ssh-keygen
@@ -39,11 +39,11 @@ Ansible playbook to provisions a Raspberry Pi 4 for the purpose of monitoring in
 
     <img alt="Enable SSH option" src="./screenshots/pi-imager-2.png" width="50%" height="50%">
 
-6.  Install the SD card into your Pi.
+6.  Insert the SD card into your Pi.
 
-7.  Connect your Pi to the same LAN as your PC.
+7.  Connect your Pi to the same LAN as your PC and power it on.
 
-8.  Run the Ansible playbook to provision your Pi.
+8.  Run the following command to provision your Pi.
 
     You can specify any of the following parameters to customize the installation.
 
@@ -75,3 +75,4 @@ Ansible playbook to provisions a Raspberry Pi 4 for the purpose of monitoring in
 [rpi]: https://www.raspberrypi.org/
 [docker]: https://docs.docker.com/get-docker/
 [make]: https://www.gnu.org/software/make/
+[ansible]: https://www.ansible.com/
