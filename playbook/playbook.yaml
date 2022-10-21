@@ -1,0 +1,153 @@
+---
+# Grafana:       https://grafana.com/docs/grafana/latest/setup-grafana/installation/
+# InfluxDB:      https://portal.influxdata.com/downloads/
+# Speedtest CLI: https://www.speedtest.net/apps/cli
+- name: Install InfluxDB
+  hosts: raspberrypi
+  tasks:
+  - name: Add InfluxDB apt key
+    become: yes
+    apt_key: 
+      url: https://repos.influxdata.com/influxdb.key
+      id: 05CE15085FC09D18E99EFB22684A14CF2582E0C5
+      state: present
+      keyring: /etc/apt/trusted.gpg.d/influxdb.gpg
+  - name: Add InfluxDB apt repository
+    become: yes
+    apt_repository: 
+      repo: 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdb.gpg] https://repos.influxdata.com/debian stable main' 
+      state: present 
+      filename: influxdata
+  - name: Install InfluxDB apt package
+    become: yes
+    apt:
+      name: influxdb2=2.4.0-1
+      state: present
+      update_cache: yes
+
+- name: Install Grafana
+  hosts: raspberrypi
+  tasks:
+  - name: Add Grafana apt key
+    become: yes
+    apt_key: 
+      url: https://packages.grafana.com/gpg.key
+      id: 4E40DDF6D76E284A4A6780E48C8C34C524098CB6
+      state: present
+      keyring: /usr/share/keyrings/grafana.key
+  - name: Add Grafana apt repository
+    become: yes
+    apt_repository: 
+      repo: 'deb [signed-by=/usr/share/keyrings/grafana.key] https://packages.grafana.com/oss/deb stable main' 
+      state: present 
+      filename: grafana
+  - name: Install Grafana apt package
+    become: yes
+    apt:
+      name: grafana=9.2.0
+      state: present
+      update_cache: yes
+
+- name: Install Speedtest CLI
+  hosts: raspberrypi
+  tasks:
+  - name: Ensure keyrings directory
+    become: yes
+    ansible.builtin.file:
+      path: /etc/apt/keyrings
+      state: directory
+  - name: Add Speedtest CLI apt key
+    become: yes
+    apt_key: 
+      url: https://packagecloud.io/ookla/speedtest-cli/gpgkey
+      id: C525F88FCF3A7E56CE2CF59131EB3981E723ACAA
+      state: present
+      keyring: /etc/apt/keyrings/ookla_speedtest-cli-archive-keyring.gpg
+  - name: Add Speedtest CLI apt repository
+    become: yes
+    apt_repository: 
+      repo: 'deb [signed-by=/etc/apt/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/debian/ bullseye main' 
+      state: present 
+      filename: ookla_speedtest-cli
+  - name: Install Speedtest CLI apt package
+    become: yes
+    apt:
+      name: speedtest=1.2.0.84-1.ea6b6773cf
+      state: present
+
+- name: Configure services
+  hosts: raspberrypi
+  tasks:
+  - name: Start InfluxDB
+    become: yes
+    ansible.builtin.systemd:
+      enabled: yes
+      state: restarted
+      daemon_reload: yes
+      name: influxdb
+  - name: Run InfluxDB setup
+    become: yes
+    ansible.builtin.shell:
+      cmd: influx setup -u admin -p password -o internet_monitor -b speed_tests -r 0 -f
+      creates: /root/.influxdbv2/configs
+  - name: Get InfluxDB operator token
+    become: yes
+    register: token
+    command: sed -nr 's/^\s*token\s*=\s*"(.+)"$/\1/p' /root/.influxdbv2/configs
+  - name: Set InfluxDB token in grafana-server environment variables
+    become: yes
+    vars:
+      os_environment:
+      - key: INFLUXDB_TOKEN 
+        value : "{{ token.stdout }}"
+    no_log: yes
+    with_items: "{{ os_environment }}"
+    lineinfile:
+      path: /etc/default/grafana-server
+      state: present
+      regexp: "{{ item.key }}="
+      line: "{{ item.key }}={{ item.value }}"
+  - name: Copy Grafana provisioning config
+    become: yes
+    ansible.builtin.copy:
+      src: provisioning/
+      dest: /etc/grafana/provisioning/
+  - name: Copy Grafana dashboards
+    become: yes
+    ansible.builtin.copy:
+      src: dashboards
+      dest: /var/lib/grafana/
+      owner: grafana
+      group: grafana
+  - name: Start Grafana
+    become: yes
+    ansible.builtin.systemd:
+      enabled: yes
+      state: restarted
+      daemon_reload: yes
+      name: grafana-server
+
+- name: Setup speedtest cron job
+  hosts: raspberrypi
+  tasks:
+  - name: Install pip
+    become: yes
+    apt:
+      name: python3-pip=20.3.4-4+rpt1*
+      state: present
+      update_cache: yes
+  - name: Install InfluxDB client library
+    ansible.builtin.pip:
+      name: influxdb-client==1.33.0
+  - name: Copy speedtest script
+    become: yes
+    ansible.builtin.copy:
+      src: speedtest.py
+      dest: /usr/local/sbin/speedtest.py
+  - name: Setup speedtest cron job
+    become: yes
+    ansible.builtin.cron:
+      user: root
+      name: "speedtest"
+      minute: "*/15"
+      job: "python /usr/local/sbin/speedtest.py"

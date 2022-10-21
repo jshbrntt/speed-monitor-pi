@@ -1,0 +1,6 @@
+---
+ungrouped:
+  hosts:
+    raspberrypi:
+      ansible_user: pi
+      ansible_host: raspberrypi.local
