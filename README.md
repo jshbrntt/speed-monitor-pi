@@ -5,7 +5,7 @@ Ansible playbook to provisions a Raspberry Pi 4 for the purpose of monitoring in
 - Tested with Raspberry Pi OS Lite (64-bit) on a Raspberry Pi 4 Model B.
 - Using OS version: `2022-09-22-raspios-bullseye-arm64-lite.img.xz`
 
-![./screenshots/dashboard-past-year.png](Dashboard past year)
+![Dashboard past year](./screenshots/dashboard-past-year.png)
 
 ### Requirements
 - [Raspberry Pi][https://www.raspberrypi.org/] 3 Model B+ or 4 Model B (Gigabit capable)
@@ -33,11 +33,11 @@ $ ssh-keygen
 
 4. Use the [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to install Raspberry Pi OS Lite (64-bit) to your SD card.
 
-    ![./screenshots/pi-imager-1.png](OS selection)
+    <img alt="OS selection" src="./screenshots/pi-imager-1.png" width="50%" height="50%">
 
 5. Ensure you have `Enable SSH` and `Allow public-key authentication only` options set with your SSH key's public key.
 
-    ![./screenshots/pi-imager-2.png](Enable SSH option)
+    <img alt="Enable SSH option" src="./screenshots/pi-imager-2.png" width="50%" height="50%">
 
 6. Install the SD card into your Pi.
 
@@ -55,7 +55,7 @@ $ make
 
 10. You should see new data points every 15 minutes.
 
-    ![./screenshots/dashboard.png](Dashboard)
+    ![Dashboard](./screenshots/dashboard.png)
 
 [rpi]: https://www.raspberrypi.org/
 [docker]: https://docs.docker.com/get-docker/
