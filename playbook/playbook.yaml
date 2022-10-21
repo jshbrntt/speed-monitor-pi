@@ -158,6 +158,7 @@
     become: yes
     ansible.builtin.file:
       path: /var/spool/cron/crontabs/root
+      mode: '0600'
       state: touch
   - name: Setup speedtest cron job
     become: yes
