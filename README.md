@@ -49,7 +49,7 @@ $ ssh-keygen
 $ make
 ```
 
-9. Access your **Internet Speed Monitor** Grafana dashboard here.
+9. Access your **Internet Speed Monitor** Grafana dashboard here, with `admin:admin`.
 
     - http://raspberrypi.local:3000/d/internet-speed-monitor/internet-speed-monitor?orgId=1
 
