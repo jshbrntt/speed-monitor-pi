@@ -154,6 +154,11 @@
     ansible.builtin.copy:
       src: speedtest.py
       dest: "{{ script_path }}"
+  - name: Touch crontab file
+    become: yes
+    ansible.builtin.file:
+      path: /var/spool/cron/crontabs/root
+      state: touch
   - name: Setup speedtest cron job
     become: yes
     lineinfile:
