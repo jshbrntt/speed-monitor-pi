@@ -8,7 +8,7 @@ Ansible playbook to provisions a Raspberry Pi 4 for the purpose of monitoring in
 ![Dashboard past year](./screenshots/dashboard-past-year.png)
 
 ### Requirements
-- [Raspberry Pi][https://www.raspberrypi.org/] 3 Model B+ or 4 Model B (Gigabit capable)
+- [Raspberry Pi](https://www.raspberrypi.org/) 3 Model B+ or 4 Model B (Gigabit capable)
 - [Docker][docker] >= v20.10.17
 - [GNU Make][make] >= 4.3
 
