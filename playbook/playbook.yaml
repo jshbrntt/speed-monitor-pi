@@ -167,3 +167,9 @@
       state: present
       regexp: python {{ script_path }}
       line: "{{ cron }} python {{ script_path }}"
+  - name: Restart cron
+    become: yes
+    ansible.builtin.systemd:
+      enabled: yes
+      state: restarted
+      name: cron
