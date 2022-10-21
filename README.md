@@ -64,7 +64,7 @@ $ make [HOST='...'] [SSH_USER='...'] [SSH_KEY='...'] [CRON='...']
 
     - http://raspberrypi.local:3000/d/internet-speed-monitor/internet-speed-monitor?orgId=1
 
-10. You should see new data points every 15 minutes.
+10. You should see new data points every 30 minutes (by default).
 
     ![Dashboard](./screenshots/dashboard.png)
 
