@@ -147,6 +147,7 @@
       state: present
       update_cache: yes
   - name: Install InfluxDB client library
+    become: yes
     ansible.builtin.pip:
       name: influxdb-client==1.33.0
   - name: Copy speedtest script
