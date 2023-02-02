@@ -5,6 +5,10 @@ This tool runs an [Ansible][ansible] playbook in a [Docker][docker] container to
 - Tested on Raspberry Pi OS Lite (64-bit) with a Raspberry Pi 4 Model B.
 - Using OS version: `2022-09-22-raspios-bullseye-arm64-lite.img.xz` (but later versions should also work!).
 
+I built this tool for a blog post I wrote about my internet speed during the pandemic which can be found here.
+
+- [How COVID-19 affected my internet connection](https://jshbrntt.dev/posts/how-covid-19-affected-my-internet-connection/)
+
 ![Dashboard past year](./screenshots/dashboard-past-year.png)
 
 ### Requirements
