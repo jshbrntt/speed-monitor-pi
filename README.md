@@ -1,6 +1,6 @@
 # Speed Monitor Pi
 
-I built this tool for a blog post I wrote about my internet speed during the pandemic which can be found here.
+I built this tool for a blog post I wrote about my internet speed during the pandemic, which can be found here.
 
 - [How COVID-19 affected my internet connection](https://jshbrntt.dev/posts/how-covid-19-affected-my-internet-connection/)
 
