@@ -149,7 +149,7 @@
   - name: Install InfluxDB client library
     become: yes
     ansible.builtin.pip:
-      name: influxdb-client==1.33.0
+      name: influxdb-client==1.6.7
   - name: Copy speedtest script
     become: yes
     ansible.builtin.copy:
