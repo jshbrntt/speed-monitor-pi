@@ -61,7 +61,7 @@ This tool runs an [Ansible][ansible] playbook in a [Docker][docker] container to
     # SSH_KEY=~/.ssh/id_rsa   [Location of the SSH private key]
     # CRON='*/30 * * * *'     [Speedtest interval (Every 30 minutes)]
 
-    $ make [HOST='...'] [SSH_USER='...'] [SSH_KEY='...'] [CRON='...']
+    $ make HOST='...' SSH_USER='...' SSH_KEY='...' CRON='...'
     ```
 
     ## Preview
