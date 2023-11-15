@@ -149,7 +149,8 @@
   - name: Install InfluxDB client library
     become: yes
     ansible.builtin.pip:
-      name: influxdb-client==1.6.7
+      name: influxdb-client==1.38
+      extra_args: '--break-system-packages'
   - name: Copy speedtest script
     become: yes
     ansible.builtin.copy:
