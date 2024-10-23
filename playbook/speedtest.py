@@ -71,6 +71,8 @@ for key, value in fields.items():
         fields[key] = '"{}"'.format(value)
     if type(value) == int and value >= 0:
         fields[key] = '{}u'.format(value)
+    if key == 'packet_loss':
+        fields[key] = '{}'.format(value)
 
 lp = (
     'speed_test,' +
